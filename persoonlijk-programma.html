@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jouw persoonlijke programma | Landelijke Onderwijsdag 2026</title>
+<meta name="description" content="Bekijk jouw persoonlijke programma voor de Landelijke Onderwijsdag 2026 op 24 november in De Werelt, Lunteren.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:image" content="/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/assets/og-image.png">
+<link rel="icon" href="assets/favicon.svg?v=3" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js");</script>
+<link rel="stylesheet" href="assets/styles.css?v=39">
+<link rel="stylesheet" href="assets/persoonlijk-programma.css?v=1">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html" aria-label="Landelijke Onderwijsdag home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-txt">Landelijke<br><b>Onderwijsdag</b></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Hoofdmenu">
+      <a href="index.html">Home</a>
+      <a href="programma.html">Programma 2026</a>
+      <a href="funplein.html">Funplein</a>
+      <a href="praktische-informatie.html">Praktische informatie</a>
+      <a href="word-standhouder.html">Word standhouder</a>
+      <a href="contact.html">Contact</a>
+      <a href="assets/files/onderwijsdag-2026.ics" class="btn" download>Zet in agenda</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Menu" aria-controls="nav" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div class="nav-backdrop"></div>
+
+<section class="page-hero">
+  <span class="blob"></span>
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Persoonlijk programma</div>
+    <span class="eyebrow">Voor deelnemers</span>
+    <h1>Jouw persoonlijke programma</h1>
+    <p class="lead">Vul je voor- en achternaam in en zie in één overzicht voor welke sessies jij je hebt ingeschreven, hoe laat ze beginnen en wie ze verzorgt, aangevuld met de rest van de dag.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container pp">
+
+    <div id="pp-zoek" class="pp-zoek reveal">
+      <form class="form" id="pp-form" novalidate>
+        <div>
+          <h2 class="pp-form-kop">Zoek je programma op</h2>
+          <p class="muted" style="margin:.4rem 0 0">Gebruik de naam waarmee je je hebt ingeschreven.</p>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="pp-voornaam">Voornaam</label><input id="pp-voornaam" name="voornaam" type="text" autocomplete="given-name" required></div>
+          <div class="field"><label for="pp-achternaam">Achternaam</label><input id="pp-achternaam" name="achternaam" type="text" autocomplete="family-name" placeholder="Bijvoorbeeld: van der Berg" required></div>
+        </div>
+        <p class="pp-melding" id="pp-melding" role="alert" hidden></p>
+        <button type="submit" class="btn" id="pp-knop" style="justify-self:start">
+          Toon mijn programma
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="pp-privacy">We gebruiken je naam alleen om je programma op te zoeken en bewaren deze niet. De deelnemerslijst is bijgewerkt tot <span id="pp-stand">recent</span>. Heb je je daarna ingeschreven, kom dan later terug.</p>
+      </form>
+    </div>
+
+    <div id="pp-resultaat" class="pp-resultaat" hidden></div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Landelijke Onderwijsdag</b></div>
+        <p style="max-width:38ch">Natuurlijk! Verbinden. Dé ontmoetingsdag voor het beroepsonderwijs, dinsdag 24 november 2026 in De Werelt, Lunteren.</p>
+        <div class="social"><a href="https://www.linkedin.com/company/consortiumberoepsonderwijs" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05C20.4 8.65 21 11 21 14.1V21h-4v-6.1c0-1.46-.03-3.35-2.04-3.35-2.04 0-2.36 1.6-2.36 3.25V21H9z"/></svg></a></div>
+      </div>
+      <div>
+        <h4>Menu</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="programma.html">Programma 2026</a></li>
+          <li><a href="funplein.html">Funplein</a></li>
+          <li><a href="praktische-informatie.html">Praktische informatie</a></li>
+          <li><a href="word-standhouder.html">Word standhouder</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Consortium Beroepsonderwijs</h4>
+        <ul class="footer-links">
+          <li>Disketteweg 11, 3821 AR Amersfoort</li>
+          <li><a href="tel:+31332460447">+31 33 - 246 04 47</a></li>
+          <li><a href="contact.html">Contactformulier</a></li>
+        </ul>
+        <div class="footer-consortium"><img src="assets/img/consortium-logo.png" alt="Consortium Beroepsonderwijs"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year>2026</span> Consortium Beroepsonderwijs</span>
+      <nav><a href="disclaimer.html">Disclaimer</a><a href="privacystatement.html">Privacystatement</a><a href="cookiebeleid.html">Cookiebeleid</a></nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/main.js?v=13"></script>
+<script src="assets/persoonlijk-programma.js?v=1"></script>
+</body>
+</html>

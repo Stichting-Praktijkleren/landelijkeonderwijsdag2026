@@ -1,0 +1,33 @@
+[functions]
+  directory = "netlify/functions"
+
+# Netjes adres voor de persoonlijke programmapagina (niet gelinkt vanaf de site, niet in de sitemap)
+[[redirects]]
+  from = "/persoonlijk-programma"
+  to = "/persoonlijk-programma.html"
+  status = 200
+
+# Bronbestanden niet als losse bestanden aanbieden
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tools/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[headers]]
+  for = "/persoonlijk-programma*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Referrer-Policy = "no-referrer"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag = "noindex, nofollow"

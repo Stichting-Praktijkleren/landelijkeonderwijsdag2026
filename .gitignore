@@ -3,3 +3,11 @@ deploy-*.zip
 .netlify/
 .DS_Store
 Thumbs.db
+
+# Persoonlijk programma: nooit gevoelige gegevens committen
+.programma-key
+*.xlsx
+*.xls
+*.csv
+tools/_werk/
+__pycache__/

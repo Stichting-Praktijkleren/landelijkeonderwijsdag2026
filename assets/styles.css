@@ -466,6 +466,9 @@ ul{margin:0 0 1rem;padding-left:1.1rem}
 .ronde-panel__head h3{margin:0;font-size:1.3rem}
 .ronde-panel__time{font-family:var(--font-head);font-weight:700;color:var(--blue-800);font-size:.95rem}
 .ronde-panel__note{color:var(--muted);font-size:.85rem;font-style:italic}
+.ronde-slots{display:flex;flex-wrap:wrap;gap:.5rem .6rem;margin:-.4rem 0 1.3rem}
+.ronde-slots__item{font-size:.86rem;color:var(--ink-soft);background:var(--white);border:1px solid var(--line);border-radius:999px;padding:.35rem .85rem;white-space:nowrap}
+.ronde-slots__item strong{font-family:var(--font-head);color:var(--blue-800);margin-right:.3em}
 .ronde-panel__chevron{margin-left:auto;flex:none;width:22px;height:22px;transition:transform .3s var(--ease)}
 .ronde-panel[open] > .ronde-panel__head .ronde-panel__chevron{transform:rotate(180deg)}
 .session-card__nr{font-family:var(--font-head);font-weight:700;font-size:.7rem;white-space:nowrap;

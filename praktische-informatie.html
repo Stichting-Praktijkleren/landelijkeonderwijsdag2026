@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="assets/styles.css?v=40">
+<link rel="stylesheet" href="assets/styles.css?v=41">
 </head>
 <body>
 
@@ -172,7 +172,7 @@
       <div class="card reveal d1">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 18l-2 3M16 18l2 3"/><circle cx="8" cy="14.5" r=".6" fill="currentColor"/><circle cx="16" cy="14.5" r=".6" fill="currentColor"/></svg></div>
         <h3>Met het openbaar vervoer</h3>
-        <p class="muted" style="margin:0">Dit jaar regelen we een pendelbus die je vanaf station Lunteren naar De Werelt brengt. Meer informatie hierover volgt later.</p>
+        <p class="muted" style="margin:0">Dit jaar rijdt er een pendelbus tussen station Lunteren en De Werelt. De vertrektijden vind je <a href="#pendelbus" style="font-weight:600;color:var(--forest)">hieronder</a>.</p>
       </div>
       <div class="card reveal d2">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
@@ -180,6 +180,23 @@
         <p class="muted" style="margin:0 0 .6rem">De Werelt<br>Westhofflaan 2, 6741 KH Lunteren</p>
         <a href="https://www.google.com/maps/search/?api=1&query=De+Werelt+Westhofflaan+2+Lunteren" target="_blank" rel="noopener" style="font-family:var(--font-head);font-weight:700;color:var(--forest)">Route plannen →</a>
       </div>
+    </div>
+
+    <div class="card pendel reveal" id="pendelbus">
+      <span class="eyebrow">Pendelservice</span>
+      <h3>Pendelbus tussen station Lunteren en De Werelt</h3>
+      <p class="muted" style="margin:.2rem 0 0">Een touringcar met 20 plaatsen brengt je heen en weer tussen het station en De Werelt.</p>
+      <div class="pendel__grid">
+        <div class="pendel__blok">
+          <h4>Ochtend: station Lunteren naar De Werelt</h4>
+          <div class="pendel__scroll"><table class="pendel__tabel"><thead><tr><th>Aankomst trein</th><th class="bus">Vertrek bus station Lunteren</th><th>Aankomst De Werelt</th></tr></thead><tbody><tr><td>08.34 uur</td><td class="bus">08.50 uur</td><td>08.55 uur</td></tr><tr><td>09.04 uur</td><td class="bus">09.10 uur</td><td>09.15 uur</td></tr><tr><td>09.34 uur</td><td class="bus">09.40 uur</td><td>09.45 uur</td></tr><tr><td>10.04 uur</td><td class="bus">10.10 uur</td><td>10.15 uur</td></tr></tbody></table></div>
+        </div>
+        <div class="pendel__blok">
+          <h4>Middag: De Werelt naar station Lunteren</h4>
+          <div class="pendel__scroll"><table class="pendel__tabel"><thead><tr><th class="bus">Vertrek bus De Werelt</th><th>Aankomst station Lunteren</th><th>Vertrek trein</th></tr></thead><tbody><tr><td class="bus">15.45 uur</td><td>15.50 uur</td><td>16.04 uur</td></tr><tr><td class="bus">16.10 uur</td><td>16.15 uur</td><td>16.34 uur</td></tr><tr><td class="bus">16.40 uur</td><td>16.45 uur</td><td>17.04 uur</td></tr></tbody></table></div>
+        </div>
+      </div>
+      <p class="pendel__note"><strong>Net te laat voor de bus?</strong> Dan loop je zelf van het station naar De Werelt, of andersom. Dat is ongeveer 15 minuten lopen. <a href="https://dewereltlunteren.nl/uploads/pdf/routebeschrijving-de-werelt.pdf" target="_blank" rel="noopener">Bekijk de looproute (pdf)</a></p>
     </div>
   </div>
 </section>

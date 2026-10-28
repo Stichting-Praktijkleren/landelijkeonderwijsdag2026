@@ -693,3 +693,16 @@ ul{margin:0 0 1rem;padding-left:1.1rem}
 @media (max-width:860px){
   .site-header .bar{background:rgba(255,255,255,.95);backdrop-filter:none;-webkit-backdrop-filter:none}
 }
+
+/* ---------- Pendelservice (praktische informatie) ---------- */
+.pendel{margin-top:2.2rem;padding:clamp(1.3rem,3vw,2.2rem)}
+.pendel h3{margin:.2rem 0 0}
+.pendel__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:1.8rem;margin-top:1.6rem}
+.pendel__blok h4{font-size:1.05rem;margin:0 0 .7rem}
+.pendel__scroll{overflow-x:auto}
+.pendel__tabel{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.95rem}
+.pendel__tabel th{font-family:var(--font-head);font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:.5rem .7rem .5rem 0;border-bottom:2px solid var(--ink);line-height:1.3;vertical-align:bottom}
+.pendel__tabel td{padding:.6rem .7rem .6rem 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.pendel__tabel .bus{font-weight:700;color:var(--blue-800)}
+.pendel__note{margin:1.6rem 0 0;padding:1rem 1.2rem;background:var(--lime-soft);border-radius:var(--r);font-size:.95rem;line-height:1.55}
+.pendel__note a{font-weight:600;color:var(--forest)}

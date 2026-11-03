@@ -173,6 +173,49 @@
     return { li: li, inhoud: inhoud };
   }
 
+  // Pendelbusschema (uit praktische-informatie.html, via het build-script) voor wie Ja heeft bij Pendelservice
+  function pendelTabel(rit) {
+    var wrap = el("div", "pendel__scroll");
+    var tabel = el("table", "pendel__tabel");
+    var thead = el("thead"), tr = el("tr");
+    rit.kop.forEach(function (k, i) { tr.appendChild(el("th", i === rit.bus ? "bus" : null, k)); });
+    thead.appendChild(tr);
+    tabel.appendChild(thead);
+    var tbody = el("tbody");
+    rit.rijen.forEach(function (rij) {
+      var r = el("tr");
+      rij.forEach(function (c, i) { r.appendChild(el("td", i === rit.bus ? "bus" : null, c)); });
+      tbody.appendChild(r);
+    });
+    tabel.appendChild(tbody);
+    wrap.appendChild(tabel);
+    return wrap;
+  }
+
+  function pendelItem(pendel, rit, titel, tekst, metNoot) {
+    var it = item("pp-item--pendel", rit.tijd);
+    it.inhoud.appendChild(el("h3", "pp-moment-titel", titel));
+    it.inhoud.appendChild(el("p", "pp-sub", tekst));
+    var kaart = el("div", "pp-pendel");
+    kaart.appendChild(el("h4", null, rit.titel));
+    kaart.appendChild(pendelTabel(rit));
+    if (metNoot && pendel.noot) {
+      var p = el("p", "pendel__note");
+      p.appendChild(el("strong", null, pendel.noot));
+      p.appendChild(document.createTextNode(" " + pendel.noottekst + " "));
+      if (pendel.link) {
+        var a = el("a", null, pendel.link.tekst);
+        a.href = pendel.link.href;
+        a.target = "_blank";
+        a.rel = "noopener";
+        p.appendChild(a);
+      }
+      kaart.appendChild(p);
+    }
+    it.inhoud.appendChild(kaart);
+    return it.li;
+  }
+
   function toon(antwoord, achternaam, cat) {
     resultaat.textContent = "";
 
@@ -202,6 +245,11 @@
     });
 
     var lijst = el("ol", "pp-dag");
+    var pendel = antwoord.pendel && cat.pendel ? cat.pendel : null;
+    if (pendel) {
+      lijst.appendChild(pendelItem(pendel, pendel.heen, "Pendelbus naar De Werelt",
+        "Je hebt aangegeven dat je de pendelbus wilt gebruiken. " + pendel.intro + " Kies de bus die past bij jouw trein.", false));
+    }
     cat.dag.forEach(function (blok) {
       var it;
       if (blok.type === "ronde") {
@@ -233,6 +281,10 @@
       }
       lijst.appendChild(it.li);
     });
+    if (pendel) {
+      lijst.appendChild(pendelItem(pendel, pendel.terug, "Pendelbus terug naar station Lunteren",
+        "Na de borrel brengt de pendelbus je terug naar het station.", true));
+    }
     resultaat.appendChild(lijst);
 
     var voet = el("p", "pp-voet");

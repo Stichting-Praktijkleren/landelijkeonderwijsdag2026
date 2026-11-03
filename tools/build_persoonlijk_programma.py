@@ -10,6 +10,9 @@ Wat het doet
   3. Schrijft de DEELNEMERSLIJST VERSLEUTELD (AES-256-GCM) naar netlify/functions/persoonlijk-programma/data.mjs.
      De sleutel staat NIET in de repository: lokaal in .programma-key en op Netlify als geheime omgevingsvariabele.
   4. Schrijft de publieke sessiegegevens (titels, toelichting, sprekers, zalen) naar assets/data/programma-sessies.json.
+  5. Pendelservice: wie in de kolom 'Pendelservice' Ja heeft, krijgt in het persoonlijk programma het
+     busschema te zien. Dat schema wordt overgenomen uit praktische-informatie.html (blok id="pendelbus"),
+     zodat de tijden altijd gelijk lopen met de site.
 
 De Excel zelf wordt nooit in de repository gezet.
 """
@@ -38,6 +41,7 @@ DATA_UIT = ROOT / "netlify" / "functions" / "persoonlijk-programma" / "data.mjs"
 JSON_UIT = ROOT / "assets" / "data" / "programma-sessies.json"
 ZALEN_HANDMATIG = ROOT / "tools" / "zalen.json"      # optioneel: {"22": "Zaal Fire 1", ...}
 TIJDEN_HANDMATIG = ROOT / "tools" / "tijden.json"    # optioneel: {"r1_kort1": "11.00 – 11.30 uur", ...}
+PRAKTISCH = ROOT / "praktische-informatie.html"      # bron van het pendelbusschema
 
 # Dagopbouw: gelijk aan het dagprogramma op programma.html
 RONDE_TIJDEN = {1: "11.00 – 12.30 uur", 2: "13.15 – 14.30 uur", 3: "15.00 – 15.30 uur"}
@@ -85,6 +89,34 @@ def slot_info(sid):
     return {"ronde": ronde, "label": label, "tijd": RONDE_TIJDEN[ronde]}
 
 
+def lees_pendel():
+    """Leest het pendelbusschema uit praktische-informatie.html (blok id="pendelbus")."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(PRAKTISCH.read_text(encoding="utf-8"), "html.parser")
+    blok = soup.find(id="pendelbus")
+    if blok is None:
+        sys.exit("Pendelbusschema (id=\"pendelbus\") niet gevonden in praktische-informatie.html.")
+    schoon = lambda el: re.sub(r"\s+", " ", el.get_text(" ", strip=True)).strip() if el else ""
+    ritten = []
+    for b in blok.select(".pendel__blok"):
+        tabel = b.find("table")
+        kop = [schoon(th) for th in tabel.select("thead th")]
+        bus = next((i for i, th in enumerate(tabel.select("thead th")) if "bus" in (th.get("class") or [])), 0)
+        rijen = [[schoon(td) for td in tr.find_all("td")] for tr in tabel.select("tbody tr")]
+        tijden = [r[bus].replace(" uur", "") for r in rijen if len(r) > bus]
+        ritten.append({"titel": schoon(b.find("h4")), "kop": kop, "bus": bus, "rijen": rijen,
+                       "tijd": f"{tijden[0]} \u2013 {tijden[-1]}" if tijden else ""})
+    if len(ritten) != 2:
+        sys.exit(f"Verwacht 2 pendelbustabellen (ochtend en middag) in praktische-informatie.html, gevonden: {len(ritten)}")
+    noot = blok.select_one(".pendel__note")
+    link = noot.find("a") if noot else None
+    intro = blok.find("p")
+    return {"intro": schoon(intro), "heen": ritten[0], "terug": ritten[1],
+            "noot": schoon(noot.find("strong")) if noot and noot.find("strong") else "",
+            "noottekst": schoon(noot).replace(schoon(link), "").replace(schoon(noot.find("strong")) if noot.find("strong") else "", "").strip() if noot else "",
+            "link": {"tekst": schoon(link), "href": link.get("href")} if link else None}
+
+
 def haal_sleutel():
     waarde = os.environ.get(SLEUTEL_ENV, "").strip()
     if not waarde and SLEUTELBESTAND.exists():
@@ -108,7 +140,7 @@ def versleutel(gegevens, sleutel):
 def lees_excel(pad):
     ws = openpyxl.load_workbook(pad, data_only=True).worksheets[0]
     kop = [str(ws.cell(1, c).value or "").strip() for c in range(1, ws.max_column + 1)]
-    kolommen = {"voornaam": None, "achternaam": None}
+    kolommen = {"voornaam": None, "achternaam": None, "pendel": None}
     slots, zaalkolommen, onbekende_zaal = {}, {}, []
     for i, naam in enumerate(kop):
         laag = naam.lower()
@@ -116,6 +148,8 @@ def lees_excel(pad):
             kolommen["voornaam"] = i
         elif "achternaam" in laag:
             kolommen["achternaam"] = i
+        elif "pendel" in laag:
+            kolommen["pendel"] = i
         m = SLOT_RE.search(laag)
         if m:
             sid = slot_id(int(m.group(1)), m.group(2), m.group(3))
@@ -127,6 +161,8 @@ def lees_excel(pad):
             onbekende_zaal.append(naam)
     if kolommen["voornaam"] is None or kolommen["achternaam"] is None:
         sys.exit("Kolommen met Voornaam en Achternaam niet gevonden.")
+    if kolommen["pendel"] is None:
+        print("LET OP: geen kolom 'Pendelservice' gevonden; niemand krijgt het pendelbusschema te zien.")
     verwacht = {"r1_lang", "r1_kort1", "r1_kort2", "r2_lang", "r2_kort1", "r2_kort2", "r3_kort"}
     ontbreekt = verwacht - set(slots)
     if ontbreekt:
@@ -183,7 +219,10 @@ def main():
             if zaal:
                 zaal_waarnemingen[nr][zaal] += 1
             keuzes.append([sid, nr])
-        deelnemers.append({"v": voornaam, "a": achternaam, "s": sorted(keuzes)})
+        d = {"v": voornaam, "a": achternaam, "s": sorted(keuzes)}
+        if kol["pendel"] is not None and str(w[kol["pendel"]] or "").strip().lower() in ("ja", "yes", "x", "true", "1"):
+            d["p"] = 1
+        deelnemers.append(d)
     if fouten:
         print("FOUTEN in de Excel:")
         for f in fouten[:40]:
@@ -198,6 +237,8 @@ def main():
     for sleutel, groep in groepen.items():
         keuzesets = {json.dumps(g["s"]) for g in groep}
         if len(keuzesets) == 1:
+            if any(g.get("p") for g in groep):
+                groep[0]["p"] = 1
             uniek.append(groep[0])
             samengevoegd += len(groep) - 1
         else:
@@ -231,6 +272,7 @@ def main():
         "slots": slots_json,
         "typen": typen,
         "zalen": zalen,
+        "pendel": lees_pendel(),
         "sessies": {str(nr): s for nr, s in sorted(catalogus.items())},
     }
     Path(args.json_uit).parent.mkdir(parents=True, exist_ok=True)
@@ -248,6 +290,7 @@ def main():
     print(f"Rijen met gegevens: {len(rijen)} | zonder voor- of achternaam (overgeslagen): {zonder_naam}")
     print(f"Deelnemers in de lijst: {len(uniek)} | met minstens 1 sessiekeuze: {met_keuze} | zonder keuze: {len(uniek) - met_keuze}")
     print(f"Dubbele inschrijvingen samengevoegd: {samengevoegd} | namen met afwijkende keuzes (worden als 'meerdere' getoond): {dubbelzinnig}")
+    print(f"Pendelservice (Ja): {sum(1 for d in uniek if d.get('p'))} deelnemers krijgen het busschema te zien")
     print(f"Zalen bekend voor {len(zalen)} van {len(catalogus)} sessies")
     print(f"Geschreven: {Path(args.data_uit).name} ({len(blob) // 1024} KB versleuteld), {Path(args.json_uit).name}")
 

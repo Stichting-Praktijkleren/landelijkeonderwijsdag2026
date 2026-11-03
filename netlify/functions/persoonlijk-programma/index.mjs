@@ -95,7 +95,8 @@ export default async (request, context) => {
   try {
     const resultaat = zoek(voornaam, achternaam);
     if (resultaat.status === "gevonden") {
-      return antwoord(200, { voornaam: resultaat.deelnemer.v, sessies: resultaat.deelnemer.s.map(([slot, nr]) => ({ slot, nr })) });
+      const d = resultaat.deelnemer;
+      return antwoord(200, { voornaam: d.v, pendel: d.p === 1, sessies: d.s.map(([slot, nr]) => ({ slot, nr })) });
     }
     return antwoord(resultaat.status === "meerdere" ? 409 : 404, { fout: resultaat.status });
   } catch (fout) {

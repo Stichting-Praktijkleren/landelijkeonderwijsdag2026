@@ -28,6 +28,12 @@ Zodra de zaalindeling bekend is, kan die op drie manieren mee:
 
 Zonder zaal toont de pagina "Wordt nog bekendgemaakt".
 
+## Pendelservice
+
+Wie in de Excel-kolom `Pendelservice` "Ja" heeft, ziet in het persoonlijk programma bovenaan de busschema's naar De Werelt
+en onderaan terug naar het station. Het schema komt uit `praktische-informatie.html` (blok `id="pendelbus"`).
+Pas je daar de tijden aan, draai dan het script opnieuw.
+
 ## Starttijden van korte sessies
 
 Standaard staat het tijdvak van de ronde bij elke sessie. Exacte tijden per slot overschrijf je in

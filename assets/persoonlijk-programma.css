@@ -60,6 +60,13 @@
 .pp-toelichting-kop{font-family:var(--font-head);font-weight:700;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .1rem}
 .pp-toelichting p{margin:.55rem 0 0;font-size:.97rem;color:var(--ink-soft);line-height:1.65}
 
+/* ---- Pendelbus (alleen voor wie Ja heeft bij Pendelservice; tabelopmaak uit styles.css .pendel__tabel) ---- */
+.pp-item--pendel::after{border-color:var(--blue-800)}
+.pp-item--pendel .pp-tijd{color:var(--blue-800)}
+.pp-pendel{margin-top:.8rem;padding:1.1rem 1.3rem 1.2rem;background:var(--white);border-radius:var(--r);box-shadow:var(--sh-sm)}
+.pp-pendel h4{font-size:1rem;margin:0 0 .6rem}
+.pp-pendel .pendel__note{margin-top:1rem}
+
 .pp-voet{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);font-size:.92rem;color:var(--muted)}
 .pp-voet a{color:var(--forest);font-weight:600}
 

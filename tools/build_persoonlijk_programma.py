@@ -52,6 +52,7 @@ DAG = [
          {"label": "Opening", "tekst": "Erwin Pierik, directeur-bestuurder van het Consortium Beroepsonderwijs"},
          {"label": "Keynote", "tekst": "Jolien Dopmeijer: \u2018Het fundament van studentenwelzijn: integraal werken\u2019"},
      ]},
+    {"type": "moment", "tijd": "10.45 \u2013 11.00", "titel": "Pauze", "sub": "Bezoek het Netwerk- en Funplein"},
     {"type": "ronde", "ronde": 1},
     {"type": "moment", "tijd": "12.30 \u2013 13.15", "titel": "Lunch", "sub": "Bezoek het Netwerk- en Funplein"},
     {"type": "ronde", "ronde": 2},

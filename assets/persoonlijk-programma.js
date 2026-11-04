@@ -103,6 +103,11 @@
   var DUUR = { presentatie: 30, pitch: 15, partnerpitch: 15, workshop: "ronde", worldcafe: "ronde", wandeling: "ronde" };
   var KORT_STANDAARD = 30;
 
+  // Overal in het persoonlijk programma tijden zonder het woord "uur", zodat het consistent is.
+  function zonderUur(tekst) {
+    return String(tekst == null ? "" : tekst).replace(/\s*uur\b/gi, "").trim();
+  }
+
   function minuten(hhmm) {
     var m = /(\d{1,2})[.:](\d{2})/.exec(hhmm || "");
     return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
@@ -120,12 +125,12 @@
     var basis = slotInfo.tijd || s.tijdvak;
     var start = minuten(basis);
     var rondeEind = eindVanRonde(cat.rondes[String(s.ronde)]);
-    if (start == null || rondeEind == null) return basis;
+    if (start == null || rondeEind == null) return zonderUur(basis);
     var duur = DUUR[s.typeSlug];
     var lang = /_lang$/.test(slotInfo.slot || "") || s.duur === "Lange sessie";
     if (duur == null) duur = lang ? "ronde" : KORT_STANDAARD;
     var eind = duur === "ronde" ? rondeEind : Math.min(start + duur, rondeEind);
-    return klok(start) + " \u2013 " + klok(eind) + " uur";
+    return klok(start) + " \u2013 " + klok(eind);
   }
 
   function sessieKaart(nr, slot, cat) {
@@ -200,7 +205,7 @@
 
   function item(klasse, tijdTekst) {
     var li = el("li", "pp-item" + (klasse ? " " + klasse : ""));
-    li.appendChild(el("div", "pp-tijd", tijdTekst));
+    li.appendChild(el("div", "pp-tijd", zonderUur(tijdTekst)));
     var inhoud = el("div", "pp-inhoud");
     li.appendChild(inhoud);
     return { li: li, inhoud: inhoud };
@@ -217,7 +222,7 @@
     var tbody = el("tbody");
     rit.rijen.forEach(function (rij) {
       var r = el("tr");
-      rij.forEach(function (c, i) { r.appendChild(el("td", i === rit.bus ? "bus" : null, c)); });
+      rij.forEach(function (c, i) { r.appendChild(el("td", i === rit.bus ? "bus" : null, zonderUur(c))); });
       tbody.appendChild(r);
     });
     tabel.appendChild(tbody);

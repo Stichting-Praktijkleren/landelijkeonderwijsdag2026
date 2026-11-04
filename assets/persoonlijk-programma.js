@@ -5,6 +5,7 @@
 
   var API = "/api/persoonlijk-programma";
   var DATA = "assets/data/programma-sessies.json";
+  var LOOPROUTE = "https://dewereltlunteren.nl/uploads/pdf/routebeschrijving-de-werelt.pdf";
   var TIMETABLE = "assets/files/timetable-2026.pdf?v=15"; // bij een nieuwe PDF: zelfde versienummer als in programma.html
   var MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
   var SLOT_VOLGORDE = { lang: 0, kort1: 1, kort2: 2, kort: 3 };
@@ -200,17 +201,15 @@
     var kaart = el("div", "pp-pendel");
     kaart.appendChild(el("h4", null, rit.titel));
     kaart.appendChild(pendelTabel(rit));
-    if (metNoot && pendel.noot) {
+    if (metNoot) {
       var p = el("p", "pendel__note");
-      p.appendChild(el("strong", null, pendel.noot));
-      p.appendChild(document.createTextNode(" " + pendel.noottekst + " "));
-      if (pendel.link) {
-        var a = el("a", null, pendel.link.tekst);
-        a.href = pendel.link.href;
-        a.target = "_blank";
-        a.rel = "noopener";
-        p.appendChild(a);
-      }
+      p.appendChild(el("strong", null, "Net te laat voor een van de bussen?"));
+      p.appendChild(document.createTextNode(" Dan loop je zelf van het station naar De Werelt of andersom. Dat is ongeveer 15 minuten lopen. "));
+      var a = el("a", null, "Bekijk hier de looproute");
+      a.href = LOOPROUTE;
+      a.target = "_blank";
+      a.rel = "noopener";
+      p.appendChild(a);
       kaart.appendChild(p);
     }
     it.inhoud.appendChild(kaart);
@@ -251,7 +250,7 @@
     var pendel = antwoord.pendel && cat.pendel ? cat.pendel : null;
     if (pendel) {
       lijst.appendChild(pendelItem(pendel, pendel.heen, "Pendelbus naar De Werelt",
-        "Je hebt aangegeven dat je de pendelbus wilt gebruiken. " + pendel.intro + " Kies de bus die past bij jouw trein.", false));
+        "Je hebt aangegeven dat je de pendelbus wilt gebruiken. " + pendel.intro, true));
     }
     cat.dag.forEach(function (blok) {
       var it;

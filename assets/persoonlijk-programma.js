@@ -97,9 +97,40 @@
     return s;
   }
 
+  // Duur per sessietype in minuten. "ronde" = tot het einde van de ronde
+  // (workshop en worldcafé: ronde 1 is 90 min, ronde 2 is 75 min).
+  // Dialoogtafel en inspiratiesessie hebben (nog) geen vaste regel: in een korte sessie 30 min, in een lange tot het einde van de ronde.
+  var DUUR = { presentatie: 30, pitch: 15, partnerpitch: 15, workshop: "ronde", worldcafe: "ronde", wandeling: "ronde" };
+  var KORT_STANDAARD = 30;
+
+  function minuten(hhmm) {
+    var m = /(\d{1,2})[.:](\d{2})/.exec(hhmm || "");
+    return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
+  }
+  function klok(min) {
+    return String(Math.floor(min / 60)).padStart(2, "0") + "." + String(min % 60).padStart(2, "0");
+  }
+  function eindVanRonde(tekst) {
+    var tijden = String(tekst || "").match(/\d{1,2}[.:]\d{2}/g);
+    return tijden && tijden.length > 1 ? minuten(tijden[tijden.length - 1]) : null;
+  }
+
+  // Starttijd uit de timetable (het slot), eindtijd volgens het type sessie, nooit later dan het einde van de ronde.
+  function sessieTijd(s, slotInfo, cat) {
+    var basis = slotInfo.tijd || s.tijdvak;
+    var start = minuten(basis);
+    var rondeEind = eindVanRonde(cat.rondes[String(s.ronde)]);
+    if (start == null || rondeEind == null) return basis;
+    var duur = DUUR[s.typeSlug];
+    var lang = /_lang$/.test(slotInfo.slot || "") || s.duur === "Lange sessie";
+    if (duur == null) duur = lang ? "ronde" : KORT_STANDAARD;
+    var eind = duur === "ronde" ? rondeEind : Math.min(start + duur, rondeEind);
+    return klok(start) + " \u2013 " + klok(eind) + " uur";
+  }
+
   function sessieKaart(nr, slot, cat) {
     var s = cat.sessies[String(nr)];
-    var slotInfo = cat.slots[slot] || {};
+    var slotInfo = Object.assign({ slot: slot }, cat.slots[slot] || {});
     var type = cat.typen[s.typeSlug] || { label: s.type, icoon: "" };
     var kaart = el("article", "session-card pp-card");
 
@@ -119,7 +150,7 @@
     var tijd = el("div");
     tijd.appendChild(el("dt", null, "Tijd"));
     var tijdDd = el("dd");
-    tijdDd.appendChild(el("span", "pp-feit-groot", slotInfo.tijd || s.tijdvak));
+    tijdDd.appendChild(el("span", "pp-feit-groot", sessieTijd(s, slotInfo, cat)));
     if (slotInfo.label) tijdDd.appendChild(el("span", "pp-deel", slotInfo.label));
     tijd.appendChild(tijdDd);
     feiten.appendChild(tijd);

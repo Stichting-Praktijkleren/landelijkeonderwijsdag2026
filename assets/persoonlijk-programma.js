@@ -5,6 +5,7 @@
 
   var API = "/api/persoonlijk-programma";
   var DATA = "assets/data/programma-sessies.json";
+  var TIMETABLE = "assets/files/timetable-2026.pdf?v=15"; // bij een nieuwe PDF: zelfde versienummer als in programma.html
   var MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
   var SLOT_VOLGORDE = { lang: 0, kort1: 1, kort2: 2, kort: 3 };
 
@@ -232,10 +233,12 @@
     datum.appendChild(d2);
     links.appendChild(datum);
     kop.appendChild(links);
-    var ander = el("button", "btn btn--ghost", "Andere naam zoeken");
-    ander.type = "button";
-    ander.addEventListener("click", reset);
-    kop.appendChild(ander);
+    // Link naar de volledige timetable (zelfde PDF en versie als op programma.html)
+    var timetable = el("a", "btn btn--ghost", "Bekijk de timetable");
+    timetable.href = TIMETABLE;
+    timetable.target = "_blank";
+    timetable.rel = "noopener";
+    kop.appendChild(timetable);
     resultaat.appendChild(kop);
 
     var perRonde = { 1: [], 2: [], 3: [] };
@@ -300,14 +303,5 @@
     var reduceer = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     h2.focus({ preventScroll: true });
     kop.scrollIntoView({ behavior: reduceer ? "auto" : "smooth", block: "start" });
-  }
-
-  function reset() {
-    resultaat.hidden = true;
-    resultaat.textContent = "";
-    form.reset();
-    melding.hidden = true;
-    zoek.hidden = false;
-    voornaamVeld.focus();
   }
 })();

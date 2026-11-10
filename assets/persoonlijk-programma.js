@@ -173,7 +173,7 @@
         toonKaart.href = "#pp-plattegrond-" + info.verdieping;
         toonKaart.addEventListener("click", function (ev) {
           ev.preventDefault();
-          toonOpKaart(info.verdieping, zaalNaam);
+          kaartPopup(zaalNaam, info, toonKaart);
         });
         zaalDd.appendChild(toonKaart);
       }
@@ -280,17 +280,77 @@
     return String(naam).toLowerCase().replace(/[^a-z0-9]+/g, "-");
   }
 
-  function toonOpKaart(verdieping, naam) {
-    var blok = document.getElementById("pp-plattegrond-" + verdieping);
-    if (!blok) return;
-    var reduceer = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    blok.scrollIntoView({ behavior: reduceer ? "auto" : "smooth", block: "start" });
-    var markering = blok.querySelector('[data-zaal="' + zaalSleutel(naam) + '"]');
-    if (markering) {
-      markering.classList.remove("is-uitgelicht");
-      void markering.offsetWidth;
-      markering.classList.add("is-uitgelicht");
+  // Pop-up met de plattegrond van één zaal. Gebruikt <dialog>: sluiten met het kruisje, Esc of een klik naast de kaart.
+  var popup = null;
+  function kaartPopup(naam, info, terugFocus) {
+    var v = VERDIEPINGEN[info.verdieping];
+    if (!v) return;
+    if (!popup) {
+      popup = el("dialog", "pp-popup");
+      popup.setAttribute("aria-labelledby", "pp-popup-titel");
+      popup.addEventListener("click", function (ev) { if (ev.target === popup) popup.close(); });
+      popup.addEventListener("close", function () {
+        document.documentElement.classList.remove("pp-popup-open");
+        if (popup._terug) popup._terug.focus();
+      });
+      document.body.appendChild(popup);
     }
+    popup.textContent = "";
+    popup._terug = terugFocus || null;
+
+    var kop = el("div", "pp-popup-kop");
+    var tekst = el("div");
+    tekst.appendChild(el("span", "eyebrow", v.titel));
+    var titel = el("h2", null, naam);
+    titel.id = "pp-popup-titel";
+    tekst.appendChild(titel);
+    if (info.toevoeging) tekst.appendChild(el("p", "pp-popup-route", info.toevoeging));
+    kop.appendChild(tekst);
+    var sluit = el("button", "pp-popup-sluit");
+    sluit.type = "button";
+    sluit.setAttribute("aria-label", "Plattegrond sluiten");
+    sluit.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    sluit.addEventListener("click", function () { popup.close(); });
+    kop.appendChild(sluit);
+    popup.appendChild(kop);
+
+    // Op mobiel is de kaart breder dan het scherm: horizontaal scrollen, met de zaal in beeld.
+    var scroll = el("div", "pp-popup-scroll");
+    var kaart = el("div", "pp-kaart pp-popup-kaart");
+    var img = el("img");
+    img.src = v.beeld;
+    img.alt = "Plattegrond " + v.titel.toLowerCase() + " van De Werelt met " + naam + " gemarkeerd";
+    img.width = v.b;
+    img.height = v.h;
+    kaart.appendChild(img);
+    var m = el("span", "pp-markering pp-markering--popup");
+    m.setAttribute("aria-hidden", "true");
+    m.style.left = info.x + "%";
+    m.style.top = info.y + "%";
+    m.style.width = info.w + "%";
+    m.style.height = info.h + "%";
+    kaart.appendChild(m);
+    // Label "Jouw zaal" boven de zaal, of eronder als de zaal bovenaan de kaart ligt
+    var label = el("span", "pp-popup-label" + (info.y < 18 ? " pp-popup-label--onder" : ""), "Jouw zaal");
+    label.setAttribute("aria-hidden", "true");
+    label.style.left = Math.min(Math.max(info.x + info.w / 2, 8), 92) + "%";
+    label.style.top = (info.y < 18 ? info.y + info.h : info.y) + "%";
+    kaart.appendChild(label);
+    scroll.appendChild(kaart);
+    popup.appendChild(scroll);
+    popup.appendChild(el("p", "pp-popup-hint", "Tip: veeg over de kaart om de rest van de verdieping te zien."));
+
+    document.documentElement.classList.add("pp-popup-open");
+    if (typeof popup.showModal === "function") popup.showModal();
+    else popup.setAttribute("open", "");
+    sluit.focus();
+
+    function centreer() {
+      var doel = (info.x + info.w / 2) / 100 * kaart.offsetWidth - scroll.clientWidth / 2;
+      scroll.scrollLeft = Math.max(0, doel);
+    }
+    if (img.complete) centreer(); else img.addEventListener("load", centreer);
+    requestAnimationFrame(centreer);
   }
 
   // Bouwt de plattegrond met per verdieping een markering op elke zaal waar de deelnemer een sessie heeft.

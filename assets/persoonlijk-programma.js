@@ -6,7 +6,7 @@
   var API = "/api/persoonlijk-programma";
   var DATA = "assets/data/programma-sessies.json";
   var LOOPROUTE = "https://dewereltlunteren.nl/uploads/pdf/routebeschrijving-de-werelt.pdf";
-  var TIMETABLE = "assets/files/timetable-2026.pdf?v=15"; // bij een nieuwe PDF: zelfde versienummer als in programma.html
+  var TIMETABLE = "assets/files/timetable-2026.pdf?v=16"; // bij een nieuwe PDF: zelfde versienummer als in programma.html
   var MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
   var SLOT_VOLGORDE = { lang: 0, kort1: 1, kort2: 2, kort: 3 };
 
@@ -164,8 +164,22 @@
     zaal.appendChild(el("dt", null, "Zaal"));
     var zaalDd = el("dd");
     var zaalNaam = cat.zalen && cat.zalen[String(nr)];
-    if (zaalNaam) zaalDd.appendChild(el("span", "pp-feit-groot", zaalNaam));
-    else zaalDd.appendChild(el("span", "pp-nog", "Wordt nog bekendgemaakt"));
+    if (zaalNaam) {
+      var info = zaalInfo(cat, zaalNaam);
+      zaalDd.appendChild(el("span", "pp-feit-groot", zaalNaam));
+      if (info && info.toevoeging) zaalDd.appendChild(el("span", "pp-deel", info.toevoeging));
+      if (info && info.verdieping != null) {
+        var toonKaart = el("a", "pp-kaartlink", "Toon op plattegrond");
+        toonKaart.href = "#pp-plattegrond-" + info.verdieping;
+        toonKaart.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          toonOpKaart(info.verdieping, zaalNaam);
+        });
+        zaalDd.appendChild(toonKaart);
+      }
+    } else {
+      zaalDd.appendChild(el("span", "pp-nog", "Wordt nog bekendgemaakt"));
+    }
     zaal.appendChild(zaalDd);
     feiten.appendChild(zaal);
 
@@ -252,6 +266,136 @@
     return it.li;
   }
 
+  // ---- Plattegrond: de zalen van deze deelnemer gemarkeerd ----
+  var VERDIEPINGEN = [
+    { titel: "Begane grond", beeld: "assets/img/plattegrond/plattegrond-begane-grond.webp", b: 1800, h: 1274 },
+    { titel: "1e verdieping", beeld: "assets/img/plattegrond/plattegrond-1e-verdieping.webp", b: 1800, h: 669 }
+  ];
+
+  function zaalInfo(cat, naam) {
+    return cat.zaalinfo ? cat.zaalinfo[naam] || null : null;
+  }
+
+  function zaalSleutel(naam) {
+    return String(naam).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  }
+
+  function toonOpKaart(verdieping, naam) {
+    var blok = document.getElementById("pp-plattegrond-" + verdieping);
+    if (!blok) return;
+    var reduceer = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    blok.scrollIntoView({ behavior: reduceer ? "auto" : "smooth", block: "start" });
+    var markering = blok.querySelector('[data-zaal="' + zaalSleutel(naam) + '"]');
+    if (markering) {
+      markering.classList.remove("is-uitgelicht");
+      void markering.offsetWidth;
+      markering.classList.add("is-uitgelicht");
+    }
+  }
+
+  // Bouwt de plattegrond met per verdieping een markering op elke zaal waar de deelnemer een sessie heeft.
+  function plattegrond(sessies, cat) {
+    var perVerdieping = [[], []], buiten = [];
+    sessies.forEach(function (x) {
+      var naam = cat.zalen && cat.zalen[String(x.nr)];
+      var info = naam && zaalInfo(cat, naam);
+      if (!naam) return;
+      var regel = { nr: x.nr, slot: x.slot, zaal: naam, info: info, s: cat.sessies[String(x.nr)] };
+      if (info && info.verdieping != null && perVerdieping[info.verdieping]) perVerdieping[info.verdieping].push(regel);
+      else buiten.push(regel);
+    });
+
+    var sectie = el("section", "pp-plattegrond");
+    sectie.id = "pp-plattegrond";
+    sectie.setAttribute("aria-labelledby", "pp-plattegrond-kop");
+    sectie.appendChild(el("span", "eyebrow", "Plattegrond De Werelt"));
+    var h = el("h2", null, "Hier vind je jouw zalen");
+    h.id = "pp-plattegrond-kop";
+    sectie.appendChild(h);
+    var heeftZalen = perVerdieping[0].length || perVerdieping[1].length;
+    sectie.appendChild(el("p", "pp-plattegrond-intro", heeftZalen
+      ? "De zalen van jouw sessies zijn roze gemarkeerd. Het nummer in de markering is de ronde."
+      : "Zo ziet De Werelt eruit. Je vindt hier de zalen, het netwerk- en funplein en de koffie."));
+
+    // verdieping met eigen zalen eerst
+    var volgorde = [0, 1];
+    if (!perVerdieping[0].length && perVerdieping[1].length) volgorde = [1, 0];
+
+    volgorde.forEach(function (v) {
+      var eigen = perVerdieping[v];
+      var fig = el("figure", "pp-verdieping");
+      fig.id = "pp-plattegrond-" + v;
+      var kop = el("figcaption", "pp-verdieping-kop");
+      kop.appendChild(el("h3", null, VERDIEPINGEN[v].titel));
+      if (eigen.length) kop.appendChild(el("span", "pp-verdieping-tel",
+        eigen.length === 1 ? "1 sessie" : eigen.length + " sessies"));
+      fig.appendChild(kop);
+
+      var kaart = el("div", "pp-kaart");
+      var img = el("img");
+      img.src = VERDIEPINGEN[v].beeld;
+      img.alt = "Plattegrond " + VERDIEPINGEN[v].titel.toLowerCase() + " van De Werelt" +
+        (eigen.length ? ", met jouw zalen gemarkeerd" : "");
+      img.loading = "lazy";
+      img.width = VERDIEPINGEN[v].b;
+      img.height = VERDIEPINGEN[v].h;
+      kaart.appendChild(img);
+
+      var perZaal = {};
+      eigen.forEach(function (r) { (perZaal[r.zaal] = perZaal[r.zaal] || []).push(r); });
+      Object.keys(perZaal).forEach(function (naam) {
+        var i = zaalInfo(cat, naam);
+        var m = el("span", "pp-markering");
+        m.setAttribute("data-zaal", zaalSleutel(naam));
+        m.setAttribute("aria-hidden", "true");
+        m.style.left = i.x + "%";
+        m.style.top = i.y + "%";
+        m.style.width = i.w + "%";
+        m.style.height = i.h + "%";
+        var rondes = [];
+        perZaal[naam].forEach(function (r) { if (r.s && rondes.indexOf(r.s.ronde) < 0) rondes.push(r.s.ronde); });
+        var badges = el("span", "pp-markering-rondes");
+        rondes.sort().forEach(function (rn) { badges.appendChild(el("b", "pp-markering-ronde", String(rn))); });
+        m.appendChild(badges);
+        kaart.appendChild(m);
+      });
+      fig.appendChild(kaart);
+
+      if (eigen.length) {
+        var legenda = el("ul", "pp-legenda");
+        eigen.slice().sort(function (a, b) {
+          return (a.s ? a.s.ronde : 9) - (b.s ? b.s.ronde : 9) || slotRang(a.slot) - slotRang(b.slot);
+        }).forEach(function (r) {
+          var li = el("li");
+          li.appendChild(el("b", "pp-markering-ronde", String(r.s ? r.s.ronde : "")));
+          var tekst = el("span");
+          tekst.appendChild(el("strong", null, r.zaal));
+          var slotInfo = Object.assign({ slot: r.slot }, cat.slots[r.slot] || {});
+          tekst.appendChild(document.createTextNode(" \u00b7 " + (r.s ? sessieTijd(r.s, slotInfo, cat) + " \u00b7 " + r.s.titel : "")));
+          if (r.info && r.info.toevoeging) tekst.appendChild(el("small", null, r.info.toevoeging));
+          li.appendChild(tekst);
+          legenda.appendChild(li);
+        });
+        fig.appendChild(legenda);
+      }
+      var groot = el("a", "pp-kaart-groot", "Open de plattegrond groot");
+      groot.href = VERDIEPINGEN[v].beeld;
+      groot.target = "_blank";
+      groot.rel = "noopener";
+      fig.appendChild(groot);
+      sectie.appendChild(fig);
+    });
+
+    if (buiten.length) {
+      var p = el("p", "pp-buiten");
+      p.appendChild(el("strong", null, "Buiten: "));
+      p.appendChild(document.createTextNode(buiten.map(function (r) { return r.s ? r.s.titel : ""; }).join(", ") +
+        ". Deze sessie vindt buiten plaats en staat daarom niet op de plattegrond."));
+      sectie.appendChild(p);
+    }
+    return sectie;
+  }
+
   function toon(antwoord, achternaam, cat) {
     resultaat.textContent = "";
 
@@ -273,7 +417,12 @@
     timetable.href = TIMETABLE;
     timetable.target = "_blank";
     timetable.rel = "noopener";
-    kop.appendChild(timetable);
+    var knoppen = el("div", "pp-kop-knoppen");
+    var naarKaart = el("a", "btn btn--ghost", "Bekijk de plattegrond");
+    naarKaart.href = "#pp-plattegrond";
+    knoppen.appendChild(naarKaart);
+    knoppen.appendChild(timetable);
+    kop.appendChild(knoppen);
     resultaat.appendChild(kop);
 
     var perRonde = { 1: [], 2: [], 3: [] };
@@ -324,6 +473,7 @@
         "Na de borrel brengt de pendelbus je terug naar het station.", true));
     }
     resultaat.appendChild(lijst);
+    resultaat.appendChild(plattegrond(antwoord.sessies, cat));
 
     var voet = el("p", "pp-voet");
     voet.appendChild(document.createTextNode("Programma onder voorbehoud van wijzigingen. Klopt er iets niet in jouw programma? "));

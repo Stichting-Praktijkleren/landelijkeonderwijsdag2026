@@ -1,0 +1,151 @@
+{
+ "_uitleg": "Locatie per zaal: toevoeging (route) en positie op de plattegrond in procenten van de afbeelding (verdieping 0 = begane grond, 1 = 1e verdieping). Bron: 261110 Plattegrond Landelijke dag v13.",
+ "Zaal Earth": {
+  "toevoeging": "Begane grond, rechts na de ingang",
+  "verdieping": 0,
+  "x": 92.94,
+  "y": 15.67,
+  "w": 5.33,
+  "h": 81.84
+ },
+ "Zaal 2": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 73.75,
+  "y": 67.45,
+  "w": 10.46,
+  "h": 17.75
+ },
+ "Zaal 3": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 66.74,
+  "y": 67.45,
+  "w": 6.72,
+  "h": 17.75
+ },
+ "Zaal 4": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 57.08,
+  "y": 67.45,
+  "w": 9.41,
+  "h": 17.75
+ },
+ "Zaal 5": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 47.25,
+  "y": 67.45,
+  "w": 9.58,
+  "h": 17.64
+ },
+ "Zaal 6": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 37.21,
+  "y": 67.45,
+  "w": 9.79,
+  "h": 17.52
+ },
+ "Zaal 8": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 28.85,
+  "y": 60.44,
+  "w": 8.02,
+  "h": 13.79
+ },
+ "Zaal 9": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 19.78,
+  "y": 60.44,
+  "w": 8.78,
+  "h": 13.79
+ },
+ "Zaal 10": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 27.68,
+  "y": 23.24,
+  "w": 9.2,
+  "h": 22.72
+ },
+ "Zaal 11": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 19.03,
+  "y": 23.24,
+  "w": 8.36,
+  "h": 22.72
+ },
+ "Zaal 12": {
+  "toevoeging": "1e verdieping",
+  "verdieping": 1,
+  "x": 11.05,
+  "y": 23.24,
+  "w": 7.69,
+  "h": 22.72
+ },
+ "Bibliotheek": {
+  "toevoeging": "Begane grond, direct links na de ingang, voorbij de receptie",
+  "verdieping": 0,
+  "x": 19.95,
+  "y": 72.64,
+  "w": 15.08,
+  "h": 12.82
+ },
+ "Atelier": {
+  "toevoeging": "Begane grond, links achterin",
+  "verdieping": 0,
+  "x": 19.91,
+  "y": 44.33,
+  "w": 11.13,
+  "h": 14.48
+ },
+ "Cinema": {
+  "toevoeging": "Begane grond, links achterin, door de dubbele deuren linksaf",
+  "verdieping": 0,
+  "x": 12.01,
+  "y": 44.33,
+  "w": 7.6,
+  "h": 14.48
+ },
+ "Zaal Fire 1": {
+  "toevoeging": "Begane grond, links achterin, door de dubbele deuren",
+  "verdieping": 0,
+  "x": 1.64,
+  "y": 28.55,
+  "w": 7.35,
+  "h": 16.26
+ },
+ "Zaal Fire 2": {
+  "toevoeging": "Begane grond, links achterin, door de dubbele deuren rechtsaf",
+  "verdieping": 0,
+  "x": 1.64,
+  "y": 11.16,
+  "w": 7.35,
+  "h": 17.03
+ },
+ "Zaal Air": {
+  "toevoeging": "Begane grond, links achterin, vóór de dubbele deuren rechtsaf",
+  "verdieping": 0,
+  "x": 1.64,
+  "y": 2.31,
+  "w": 23.48,
+  "h": 8.43
+ },
+ "Zaal Water": {
+  "toevoeging": "Begane grond, links achterin, vóór de dubbele deuren rechtsaf",
+  "verdieping": 0,
+  "x": 25.37,
+  "y": 2.31,
+  "w": 21.5,
+  "h": 7.54
+ },
+ "Buiten": {
+  "toevoeging": "",
+  "verdieping": null
+ }
+}

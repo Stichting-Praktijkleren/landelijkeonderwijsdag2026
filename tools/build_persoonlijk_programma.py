@@ -40,6 +40,7 @@ SLEUTEL_ENV = "PERSOONLIJK_PROGRAMMA_SLEUTEL"
 DATA_UIT = ROOT / "netlify" / "functions" / "persoonlijk-programma" / "data.mjs"
 JSON_UIT = ROOT / "assets" / "data" / "programma-sessies.json"
 ZALEN_HANDMATIG = ROOT / "tools" / "zalen.json"      # optioneel: {"22": "Zaal Fire 1", ...}
+ZAAL_LOCATIES = ROOT / "tools" / "zaal-locaties.json"  # toevoeging (route) en plek op de plattegrond per zaal
 TIJDEN_HANDMATIG = ROOT / "tools" / "tijden.json"    # optioneel: {"r1_kort1": "11.00 – 11.30 uur", ...}
 PRAKTISCH = ROOT / "praktische-informatie.html"      # bron van het pendelbusschema
 
@@ -136,6 +137,17 @@ def versleutel(gegevens, sleutel):
     iv = secrets.token_bytes(12)
     ciphertext_en_tag = AESGCM(sleutel).encrypt(iv, json.dumps(gegevens, ensure_ascii=False, separators=(",", ":")).encode("utf-8"), None)
     return base64.b64encode(iv + ciphertext_en_tag).decode("ascii")
+
+
+def lees_zaalinfo(zalen):
+    """Toevoeging en plattegrondpositie per zaal; waarschuwt als een gebruikte zaal ontbreekt."""
+    if not ZAAL_LOCATIES.exists():
+        return {}
+    info = {k: v for k, v in json.loads(ZAAL_LOCATIES.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+    ontbreekt = sorted({z for z in zalen.values() if z not in info})
+    if ontbreekt:
+        print("LET OP: zalen zonder toevoeging/plattegrondplek in tools/zaal-locaties.json:", ontbreekt)
+    return info
 
 
 def lees_excel(pad):
@@ -273,6 +285,7 @@ def main():
         "slots": slots_json,
         "typen": typen,
         "zalen": zalen,
+        "zaalinfo": lees_zaalinfo(zalen),
         "pendel": lees_pendel(),
         "sessies": {str(nr): s for nr, s in sorted(catalogus.items())},
     }

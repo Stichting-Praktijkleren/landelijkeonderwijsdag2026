@@ -17,16 +17,21 @@ De publieke sessiegegevens (zonder namen) staan in `assets/data/programma-sessie
 3. Controleer de samenvatting (aantallen). Het script stopt als een sessie niet in `programma.html` voorkomt.
 4. `git add -A`, commit en push naar `master`; Netlify zet het live.
 
-## Zalen
+## Zalen en plattegrond
 
-Zodra de zaalindeling bekend is, kan die op drie manieren mee:
+- `tools/zalen.json`: sessienummer naar zaal (uit de timetable-PDF).
+- `tools/zaal-locaties.json`: per zaal de toevoeging (bijvoorbeeld "1e verdieping") en de plek op de plattegrond
+  (`verdieping` 0 of 1, `x`, `y`, `w`, `h` in procenten van de afbeelding in `assets/img/plattegrond/`).
+- Een zaal in de Excel (kolom met "zaal" in de kop of `(Zaal ...)` achter de sessietitel) gaat vóór `zalen.json`.
 
-- Een extra kolom in de Excel met "zaal" plus de ronde in de kop, bijvoorbeeld `Ronde 1 lange sessie zaal`
-  of `Ronde 2 korte sessie deel 1 zaal`.
-- Achter de sessietitel in de cel: `(Zaal Earth)`.
-- Of een bestand `tools/zalen.json` met sessienummer naar zaal: `{"9": "Zaal Earth", "37": "Zaal Fire 1"}`.
+Na een wijziging:
 
-Zonder zaal toont de pagina "Wordt nog bekendgemaakt".
+```
+python tools/zalen_op_programma.py
+python tools/build_persoonlijk_programma.py "pad\naar\Badges.xlsx"
+```
+
+Het eerste script zet de zaal op de sessiekaarten in `programma.html`, het tweede zet zalen en plattegrondposities in het persoonlijk programma.
 
 ## Pendelservice
 

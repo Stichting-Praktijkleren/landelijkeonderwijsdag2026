@@ -78,3 +78,40 @@
   .pp-tijd{text-align:left;padding:0 0 .25rem}
   .form-row{grid-template-columns:1fr}
 }
+
+/* ---- Kopknoppen ---- */
+.pp-kop-knoppen{display:flex;flex-wrap:wrap;gap:.6rem}
+
+/* ---- Zaal in de sessiekaart ---- */
+.pp-kaartlink{display:inline-block;margin-top:.35rem;font-family:var(--font-head);font-weight:700;font-size:.82rem;color:var(--pink);text-decoration:underline;text-underline-offset:3px}
+
+/* ---- Plattegrond ---- */
+.pp-plattegrond{margin-top:3rem;padding-top:2.4rem;border-top:1px solid var(--line);scroll-margin-top:90px}
+.pp-plattegrond h2{margin:.2rem 0 .5rem}
+.pp-plattegrond-intro{color:var(--ink-soft);margin:0 0 1.6rem;max-width:60ch}
+.pp-verdieping{margin:0 0 2.2rem;scroll-margin-top:90px}
+.pp-verdieping-kop{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.7rem}
+.pp-verdieping-kop h3{font-family:var(--font-head);font-weight:800;font-size:1.25rem;margin:0;color:var(--blue-deep)}
+.pp-verdieping-tel{font-family:var(--font-head);font-weight:700;font-size:.8rem;color:var(--pink)}
+.pp-kaart{position:relative;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-sm);background:var(--white)}
+.pp-kaart img{display:block;width:100%;height:auto}
+.pp-markering{position:absolute;border:4px solid var(--pink);background:rgba(231,43,118,.72);border-radius:4px;
+  box-shadow:0 0 0 3px var(--white),0 4px 14px rgba(231,43,118,.45);pointer-events:none}
+.pp-markering-rondes{position:absolute;top:-.85rem;left:-.85rem;display:flex;gap:3px}
+.pp-markering.is-uitgelicht{animation:pp-puls 1.2s ease-out 2}
+@keyframes pp-puls{0%{box-shadow:0 0 0 0 rgba(231,43,118,.7)}100%{box-shadow:0 0 0 18px rgba(231,43,118,0)}}
+.pp-markering-ronde{display:inline-grid;box-shadow:0 0 0 2px var(--white);place-items:center;min-width:1.5rem;height:1.5rem;padding:0 .3rem;border-radius:999px;
+  background:var(--pink);color:var(--white);font-family:var(--font-head);font-weight:700;font-size:.78rem;line-height:1}
+.pp-legenda{list-style:none;margin:.9rem 0 0;padding:0;display:grid;gap:.6rem}
+.pp-legenda li{display:flex;gap:.7rem;align-items:flex-start;font-size:.93rem;line-height:1.45}
+.pp-legenda strong{font-family:var(--font-head)}
+.pp-legenda small{display:block;color:var(--muted);font-size:.84rem}
+.pp-kaart-groot{display:inline-block;margin-top:.7rem;font-size:.85rem;font-weight:600;color:var(--forest);text-decoration:underline;text-underline-offset:3px}
+.pp-buiten{font-size:.93rem;color:var(--ink-soft);background:var(--lime-soft);border-radius:var(--r);padding:.9rem 1.1rem}
+@media (max-width:640px){
+  .pp-markering{border-width:2px;box-shadow:0 0 0 2px var(--white)}
+  .pp-markering-rondes{top:-.6rem;left:-.6rem}
+  .pp-markering-ronde{min-width:1.1rem;height:1.1rem;font-size:.62rem;padding:0 .2rem}
+}
+@media (prefers-reduced-motion:reduce){.pp-markering.is-uitgelicht{animation:none;outline:3px solid var(--blue)}}
+@media print{.pp-plattegrond{break-before:page}.pp-verdieping{break-inside:avoid}.pp-kaartlink,.pp-kaart-groot{display:none}}

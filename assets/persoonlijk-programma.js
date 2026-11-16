@@ -268,8 +268,8 @@
 
   // ---- Plattegrond: de zalen van deze deelnemer gemarkeerd ----
   var VERDIEPINGEN = [
-    { titel: "Begane grond", beeld: "assets/img/plattegrond/plattegrond-begane-grond.webp", b: 1800, h: 1274 },
-    { titel: "1e verdieping", beeld: "assets/img/plattegrond/plattegrond-1e-verdieping.webp", b: 1800, h: 669 }
+    { titel: "Begane grond", beeld: "assets/img/plattegrond/plattegrond-begane-grond.webp?v=2", b: 1800, h: 1274 },
+    { titel: "1e verdieping", beeld: "assets/img/plattegrond/plattegrond-1e-verdieping.webp?v=2", b: 1800, h: 669 }
   ];
 
   function zaalInfo(cat, naam) {

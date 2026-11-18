@@ -147,5 +147,13 @@
  "Buiten": {
   "toevoeging": "",
   "verdieping": null
+ },
+ "Bij de stand van AMR Zorgnetwerken": {
+  "toevoeging": "Netwerkplein, begane grond, rechts in de hal",
+  "verdieping": 0,
+  "x": 64.3,
+  "y": 51.4,
+  "w": 5.8,
+  "h": 5.6
  }
 }

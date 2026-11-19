@@ -26,7 +26,7 @@ def _speakers(dl):
     if dl is None:
         return result
     for dt in dl.find_all("dt"):
-        if _clean(dt.get_text()).lower() not in ("spreker", "sprekers"):
+        if _clean(dt.get_text()).lower() not in ("spreker", "sprekers", "bij de stand"):
             continue
         dd = dt.find_next_sibling("dd")
         if dd is None:

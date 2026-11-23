@@ -6,7 +6,7 @@
   var API = "/api/persoonlijk-programma";
   var DATA = "assets/data/programma-sessies.json";
   var LOOPROUTE = "https://dewereltlunteren.nl/uploads/pdf/routebeschrijving-de-werelt.pdf";
-  var TIMETABLE = "assets/files/timetable-2026.pdf?v=17"; // bij een nieuwe PDF: zelfde versienummer als in programma.html
+  var TIMETABLE = "assets/files/timetable-2026.pdf?v=18"; // bij een nieuwe PDF: zelfde versienummer als in programma.html
   var MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
   var SLOT_VOLGORDE = { lang: 0, kort1: 1, kort2: 2, kort: 3 };
 

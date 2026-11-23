@@ -40,6 +40,7 @@ SLEUTEL_ENV = "PERSOONLIJK_PROGRAMMA_SLEUTEL"
 DATA_UIT = ROOT / "netlify" / "functions" / "persoonlijk-programma" / "data.mjs"
 JSON_UIT = ROOT / "assets" / "data" / "programma-sessies.json"
 ZALEN_HANDMATIG = ROOT / "tools" / "zalen.json"      # optioneel: {"22": "Zaal Fire 1", ...}
+VERVALLEN = ROOT / "tools" / "vervallen.json"  # sessies die niet doorgaan: {"63": {"titel": ..., "ronde": 3}}
 ZAAL_LOCATIES = ROOT / "tools" / "zaal-locaties.json"  # toevoeging (route) en plek op de plattegrond per zaal
 TIJDEN_HANDMATIG = ROOT / "tools" / "tijden.json"    # optioneel: {"r1_kort1": "11.00 – 11.30 uur", ...}
 PRAKTISCH = ROOT / "praktische-informatie.html"      # bron van het pendelbusschema
@@ -204,6 +205,10 @@ def main():
     rijen, kol, slots, zaalkol = lees_excel(excel)
 
     deelnemers, zaal_waarnemingen = [], collections.defaultdict(collections.Counter)
+    vervallen = {}
+    if VERVALLEN.exists():
+        vervallen = {k: v for k, v in json.loads(VERVALLEN.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+    aantal_vervallen = collections.Counter()
     zonder_naam, fouten = 0, []
     for rijnr, w in rijen:
         voornaam = str(w[kol["voornaam"]] or "").strip()
@@ -223,6 +228,14 @@ def main():
             nr, zaal = int(m.group(1)), (m.group(3) or "").strip()
             if sid in zaalkol and w[zaalkol[sid]] not in (None, ""):
                 zaal = str(w[zaalkol[sid]]).strip()
+            if nr not in catalogus and str(nr) in vervallen:
+                # keuze bewaren: de deelnemer ziet in het persoonlijk programma dat deze sessie vervalt
+                if vervallen[str(nr)].get("ronde") != slot_info(sid)["ronde"]:
+                    fouten.append(f"rij {rijnr}: vervallen sessie {nr} staat niet in ronde {slot_info(sid)['ronde']}")
+                    continue
+                keuzes.append([sid, nr])
+                aantal_vervallen[nr] += 1
+                continue
             if nr not in catalogus:
                 fouten.append(f"rij {rijnr}: sessie {nr} bestaat niet op programma.html")
                 continue
@@ -286,6 +299,7 @@ def main():
         "typen": typen,
         "zalen": zalen,
         "zaalinfo": lees_zaalinfo(zalen),
+        "vervallen": vervallen,
         "pendel": lees_pendel(),
         "sessies": {str(nr): s for nr, s in sorted(catalogus.items())},
     }
@@ -305,6 +319,8 @@ def main():
     print(f"Deelnemers in de lijst: {len(uniek)} | met minstens 1 sessiekeuze: {met_keuze} | zonder keuze: {len(uniek) - met_keuze}")
     print(f"Dubbele inschrijvingen samengevoegd: {samengevoegd} | namen met afwijkende keuzes (worden als 'meerdere' getoond): {dubbelzinnig}")
     print(f"Pendelservice (Ja): {sum(1 for d in uniek if d.get('p'))} deelnemers krijgen het busschema te zien")
+    for nr, n in sorted(aantal_vervallen.items()):
+        print(f"Vervallen sessie {nr}: {n} deelnemer(s) zien in hun programma dat deze niet doorgaat")
     print(f"Zalen bekend voor {len(zalen)} van {len(catalogus)} sessies")
     print(f"Geschreven: {Path(args.data_uit).name} ({len(blob) // 1024} KB versleuteld), {Path(args.json_uit).name}")
 

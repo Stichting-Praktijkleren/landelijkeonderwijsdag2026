@@ -133,6 +133,21 @@
     return klok(start) + " \u2013 " + klok(eind);
   }
 
+  // Een sessie die is komen te vervallen (tools/vervallen.json): duidelijk melden, met een verwijzing naar het programma.
+  function vervallenKaart(nr, cat) {
+    var weg = (cat.vervallen && cat.vervallen[String(nr)]) || {};
+    var kaart = el("div", "pp-vervallen");
+    kaart.appendChild(el("span", "pp-vervallen-label", "Vervallen"));
+    kaart.appendChild(el("h4", "pp-titel", "Nr. " + String(nr).padStart(2, "0") + (weg.titel ? " \u00b7 " + weg.titel : "")));
+    var p = el("p", null, "Deze sessie gaat helaas niet door. Je kunt in deze ronde een andere sessie volgen. ");
+    var a = el("a", null, "Bekijk welke sessies er zijn");
+    a.href = "/programma";
+    p.appendChild(a);
+    p.appendChild(document.createTextNode("."));
+    kaart.appendChild(p);
+    return kaart;
+  }
+
   function sessieKaart(nr, slot, cat) {
     var s = cat.sessies[String(nr)];
     var slotInfo = Object.assign({ slot: slot }, cat.slots[slot] || {});
@@ -488,7 +503,9 @@
     var perRonde = { 1: [], 2: [], 3: [] };
     antwoord.sessies.forEach(function (x) {
       var s = cat.sessies[String(x.nr)];
-      if (s && perRonde[s.ronde]) perRonde[s.ronde].push(x);
+      var weg = !s && cat.vervallen ? cat.vervallen[String(x.nr)] : null;
+      var ronde = s ? s.ronde : (weg ? weg.ronde : null);
+      if (ronde && perRonde[ronde]) perRonde[ronde].push(x);
     });
 
     var lijst = el("ol", "pp-dag");
@@ -508,7 +525,9 @@
         if (!keuzes.length) {
           it.inhoud.appendChild(el("p", "pp-leeg", "Je hebt je in deze ronde niet ingeschreven voor een presentatie."));
         } else {
-          keuzes.forEach(function (x) { it.inhoud.appendChild(sessieKaart(x.nr, x.slot, cat)); });
+          keuzes.forEach(function (x) {
+            it.inhoud.appendChild(cat.sessies[String(x.nr)] ? sessieKaart(x.nr, x.slot, cat) : vervallenKaart(x.nr, cat));
+          });
         }
       } else if (blok.type === "opening") {
         it = item("", blok.tijd);

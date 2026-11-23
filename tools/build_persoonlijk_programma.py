@@ -40,6 +40,7 @@ SLEUTEL_ENV = "PERSOONLIJK_PROGRAMMA_SLEUTEL"
 DATA_UIT = ROOT / "netlify" / "functions" / "persoonlijk-programma" / "data.mjs"
 JSON_UIT = ROOT / "assets" / "data" / "programma-sessies.json"
 ZALEN_HANDMATIG = ROOT / "tools" / "zalen.json"      # optioneel: {"22": "Zaal Fire 1", ...}
+UITSLUITEN = ROOT / "tools" / "uitsluiten.json"  # inschrijvingsnummers (INS-...) die niet meetellen, bv. een dubbele aanmelding
 VERVALLEN = ROOT / "tools" / "vervallen.json"  # sessies die niet doorgaan: {"63": {"titel": ..., "ronde": 3}}
 ZAAL_LOCATIES = ROOT / "tools" / "zaal-locaties.json"  # toevoeging (route) en plek op de plattegrond per zaal
 TIJDEN_HANDMATIG = ROOT / "tools" / "tijden.json"    # optioneel: {"r1_kort1": "11.00 – 11.30 uur", ...}
@@ -210,7 +211,14 @@ def main():
         vervallen = {k: v for k, v in json.loads(VERVALLEN.read_text(encoding="utf-8")).items() if not k.startswith("_")}
     aantal_vervallen = collections.Counter()
     zonder_naam, fouten = 0, []
+    uitsluiten = set()
+    if UITSLUITEN.exists():
+        uitsluiten = {str(x).strip() for x in json.loads(UITSLUITEN.read_text(encoding="utf-8")).get("inschrijvingen", [])}
+    uitgesloten = 0
     for rijnr, w in rijen:
+        if uitsluiten and any(str(c or "").strip() in uitsluiten for c in w[:2]):
+            uitgesloten += 1
+            continue
         voornaam = str(w[kol["voornaam"]] or "").strip()
         achternaam = str(w[kol["achternaam"]] or "").strip()
         if not voornaam or not achternaam:
@@ -321,6 +329,8 @@ def main():
     print(f"Pendelservice (Ja): {sum(1 for d in uniek if d.get('p'))} deelnemers krijgen het busschema te zien")
     for nr, n in sorted(aantal_vervallen.items()):
         print(f"Vervallen sessie {nr}: {n} deelnemer(s) zien in hun programma dat deze niet doorgaat")
+    if uitsluiten:
+        print(f"Uitgesloten via tools/uitsluiten.json: {uitgesloten} rij(en)")
     print(f"Zalen bekend voor {len(zalen)} van {len(catalogus)} sessies")
     print(f"Geschreven: {Path(args.data_uit).name} ({len(blob) // 1024} KB versleuteld), {Path(args.json_uit).name}")
 

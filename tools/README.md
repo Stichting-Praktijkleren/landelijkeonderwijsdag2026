@@ -50,3 +50,7 @@ De sleutel staat in `.programma-key` (niet in git) en moet als geheime omgevings
 `PERSOONLIJK_PROGRAMMA_SLEUTEL` in Netlify staan. Raak je de sleutel kwijt, dan kan de lijst niet meer gelezen worden:
 draai het script dan opnieuw met een nieuwe sleutel en zet die ook in Netlify. Het script maakt de sleutel aan als hij ontbreekt.
 Bij een nieuwe sleutel moeten `data.mjs` en de omgevingsvariabele altijd samen worden bijgewerkt.
+
+## Dubbele aanmelding uitsluiten
+
+Staat iemand twee keer in de Excel met verschillende keuzes, dan ziet die persoon geen programma. Zet het inschrijvingsnummer (eerste kolom, bijvoorbeeld `INS-31332`) van de regel die weg moet in `tools/uitsluiten.json` en draai het build-script opnieuw. Geen namen in dat bestand: de repo is publiek.

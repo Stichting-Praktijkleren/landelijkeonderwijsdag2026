@@ -40,7 +40,7 @@ Bron: `Consortium Beroepsonderwijs_huisstijl_Styleguide_V1.pdf`.
 - **Plattegrond:** `assets/img/plattegrond/` (begane grond en 1e verdieping, uit de plattegrond-PDF, nu v17 van 18 november). Het persoonlijk programma markeert daarop de zalen van de deelnemer. Nieuwe plattegrond: afbeeldingen vervangen én de posities (x, y, w, h in procenten) in `tools/zaal-locaties.json` controleren.
 - **Nooit committen:** de Excel (`*.xlsx`, `*.csv`) en `.programma-key` staan in `.gitignore`. De repo is publiek.
 - De sleutel staat in een gedeelde Google Drive-map van het team (samen met de Excel) en in Netlify als omgevingsvariabele `PERSOONLIJK_PROGRAMMA_SLEUTEL`. Wordt de sleutel vervangen, werk dan `data.mjs` en de variabele samen bij. Een geheime variabele moet in de Netlify-webinterface worden gezet (via de koppeling lukt dat niet).
-- Beperkingen om te weten: wie een volledige naam raadt, ziet dat programma; er is een eenvoudige limiet per IP-adres. Overweeg een tweede veld (e-mail of badgenummer) als dat een probleem wordt.
+- Beperkingen om te weten: wie een volledige naam raadt, ziet dat programma. Er is bewust géén limiet per IP-adres meer (op 24 november weggehaald): op locatie delen alle deelnemers één wifi-IP en kregen ze anders "te vaak gezocht". Overweeg een tweede veld (e-mail of badgenummer) als dat een probleem wordt.
 
 ## Hosting en deploy
 

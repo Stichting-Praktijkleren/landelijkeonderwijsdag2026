@@ -6,8 +6,6 @@ import { createDecipheriv } from "node:crypto";
 import versleuteld from "./data.mjs";
 
 const SLEUTEL_ENV = "PERSOONLIJK_PROGRAMMA_SLEUTEL";
-const MAX_POGINGEN = 15;
-const VENSTER_MS = 10 * 60 * 1000;
 const TUSSENVOEGSELS = new Set(["van", "de", "der", "den", "te", "ten", "ter", "het", "t", "op", "in", "aan", "bij", "von", "el", "al", "vd", "v"]);
 
 export const config = { path: "/api/persoonlijk-programma" };
@@ -54,16 +52,6 @@ function zoek(voornaam, achternaam) {
   return { status: "gevonden", deelnemer: kandidaten[0] };
 }
 
-const pogingen = new Map();
-function teVeel(ip) {
-  const nu = Date.now();
-  const recent = (pogingen.get(ip) ?? []).filter((t) => nu - t < VENSTER_MS);
-  recent.push(nu);
-  pogingen.set(ip, recent);
-  if (pogingen.size > 5000) for (const [sleutel, tijden] of pogingen) if (nu - tijden[tijden.length - 1] > VENSTER_MS) pogingen.delete(sleutel);
-  return recent.length > MAX_POGINGEN;
-}
-
 const antwoord = (status, body) =>
   new Response(JSON.stringify(body), {
     status,
@@ -77,8 +65,7 @@ const antwoord = (status, body) =>
 export default async (request, context) => {
   if (request.method !== "POST") return antwoord(405, { fout: "methode" });
 
-  const ip = context?.ip || request.headers.get("x-nf-client-connection-ip") || "onbekend";
-  if (teVeel(ip)) return antwoord(429, { fout: "te_veel" });
+  // Geen limiet per IP-adres: op de dag zelf zitten alle deelnemers op hetzelfde wifi-netwerk (één IP-adres).
 
   let invoer;
   try {

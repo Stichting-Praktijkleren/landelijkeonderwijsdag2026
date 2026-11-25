@@ -3,7 +3,7 @@
 Statische website van de Landelijke Onderwijsdag 2026 (Consortium Beroepsonderwijs / Stichting Praktijkleren), live op https://landelijkeonderwijsdag.nl.
 Zie `README.md` voor de praktische handleiding en `tools/README.md` voor het persoonlijk programma.
 
-**Status (vanaf 25 november 2026): het event is geweest.** De site is een terugblik. Alle inschrijflinken, de pagina Praktische informatie (omgeleid naar de homepage) en het persoonlijk programma zijn offline gehaald; Word standhouder is nu de pagina Partners (dank aan sponsoren en standhouders). Bij een volgende editie zet je dit terug met `git revert` van de commit "Na het event: ..." en pas je de teksten, data en links aan.
+**Status (vanaf 25 november 2026): het event is geweest.** De site is een terugblik. Alle inschrijflinken, de pagina's Programma en Praktische informatie (omgeleid naar de homepage, de timetable-PDF is ook verwijderd) en het persoonlijk programma zijn offline gehaald; Word standhouder is nu de pagina Partners (dank aan sponsoren en standhouders). Bij een volgende editie zet je dit terug met `git revert` van de commit "Na het event: ..." en pas je de teksten, data en links aan.
 
 ## Werkwijze
 

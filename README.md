@@ -26,7 +26,7 @@ Ging er iets mis? Rechtsklik in het tabblad History op de laatste commit en kies
 
 | Bestand of map | Inhoud |
 | --- | --- |
-| `index.html`, `programma.html`, `funplein.html`, `word-standhouder.html` (nu "Partners"), `contact.html` | de pagina's van de site |
+| `index.html`, `funplein.html`, `word-standhouder.html` (nu "Partners"), `contact.html` (de pagina `programma.html` is na het event offline gehaald, terug te zetten met `git revert`) | de pagina's van de site |
 | `assets/styles.css` | alle opmaak (kleuren, lettertypes, kaarten) |
 | `assets/main.js` | menu, filters, favorieten |
 | `assets/img/` | foto's, logo's van sprekers en standhouders |

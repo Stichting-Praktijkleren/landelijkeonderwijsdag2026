@@ -26,15 +26,13 @@ Ging er iets mis? Rechtsklik in het tabblad History op de laatste commit en kies
 
 | Bestand of map | Inhoud |
 | --- | --- |
-| `index.html`, `programma.html`, `funplein.html`, `praktische-informatie.html`, `word-standhouder.html`, `contact.html` | de pagina's van de site |
-| `persoonlijk-programma.html` | verborgen pagina voor deelnemers (staat niet in het menu) |
+| `index.html`, `programma.html`, `funplein.html`, `word-standhouder.html` (nu "Partners"), `contact.html` | de pagina's van de site |
 | `assets/styles.css` | alle opmaak (kleuren, lettertypes, kaarten) |
 | `assets/main.js` | menu, filters, favorieten |
 | `assets/img/` | foto's, logo's van sprekers en standhouders |
 | `assets/files/` | timetable-PDF, brochure, agenda-bestand (.ics) |
-| `assets/data/` | sessiegegevens voor het persoonlijk programma (wordt gegenereerd, niet handmatig aanpassen) |
-| `netlify/`, `netlify.toml` | server-functie en instellingen voor het persoonlijk programma |
-| `tools/` | scripts en uitleg voor het persoonlijk programma (zie `tools/README.md`) |
+| `netlify.toml`, `_redirects`, `_headers` | instellingen en omleidingen |
+| `tools/` | scripts en uitleg voor het persoonlijk programma van 2026 (staat offline, zie `tools/README.md`) |
 | `sitemap.xml`, `robots.txt` | zoekmachine-instellingen |
 
 Huisstijl: kleuren `#39B9EC`, `#E72B76`, `#CCD626`, `#F2B300`; lettertypes Ubuntu (koppen) en Poppins (tekst). Zie de styleguide-PDF in de hoofdmap.
@@ -59,8 +57,8 @@ Zet de afbeelding in `assets/img/` en kopieer een bestaand blok in de juiste pag
 **Opmaak (CSS) aanpassen**
 Pas `assets/styles.css` aan en verhoog daarna in **alle** `.html`-bestanden het getal in `styles.css?v=...` (zoek en vervang over alle bestanden). Anders zien bezoekers nog even de oude opmaak.
 
-**Het persoonlijk programma bijwerken met een nieuwe deelnemerslijst**
-Zie `tools/README.md`. Dat vraagt de Excel en een geheime sleutel; vraag hulp aan wie dit eerder deed.
+**Het persoonlijk programma van 2026 weer online zetten (volgende editie)**
+De pagina, de server-functie, de sessiegegevens en de plattegronden zijn na het event van de site gehaald. Je haalt ze terug met `git revert` van de commit "Na het event: ..." (zoek die in de git-geschiedenis). Daarna werk je het bij volgens `tools/README.md`; dat vraagt de Excel en een geheime sleutel.
 
 ## Wat je nooit moet committen
 

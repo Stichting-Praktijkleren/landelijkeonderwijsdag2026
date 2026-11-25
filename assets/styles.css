@@ -713,3 +713,7 @@ ul{margin:0 0 1rem;padding-left:1.1rem}
 .session-card__zaal svg{width:16px;height:16px;flex:none;margin-top:.12rem;color:var(--pink)}
 .session-card__zaal strong{font-family:var(--font-head);font-weight:700;color:var(--ink)}
 .session-card__zaal-route{display:block;font-size:.8rem;color:var(--muted)}
+
+/* Na het event: favorieten en "Sessie vol" tonen niet meer */
+.fav-toggle,.session-card__fav{display:none}
+.session-card--full::before{display:none}

@@ -3,6 +3,8 @@
 Statische website van de Landelijke Onderwijsdag 2026 (Consortium Beroepsonderwijs / Stichting Praktijkleren), live op https://landelijkeonderwijsdag.nl.
 Zie `README.md` voor de praktische handleiding en `tools/README.md` voor het persoonlijk programma.
 
+**Status (vanaf 25 november 2026): het event is geweest.** De site is een terugblik. Alle inschrijflinken, de pagina Praktische informatie (omgeleid naar de homepage) en het persoonlijk programma zijn offline gehaald; Word standhouder is nu de pagina Partners (dank aan sponsoren en standhouders). Bij een volgende editie zet je dit terug met `git revert` van de commit "Na het event: ..." en pas je de teksten, data en links aan.
+
 ## Werkwijze
 
 - **Taal:** praat en schrijf in het Nederlands, ook in commit-berichten en teksten op de site.
@@ -31,7 +33,9 @@ Bron: `Consortium Beroepsonderwijs_huisstijl_Styleguide_V1.pdf`.
 - **Standhouders** staan op `funplein.html` en `word-standhouder.html`; de afbeelding hoort in `assets/img/`.
 - Het programma is volledig. Er staat geen "er volgt nog meer"-melding meer; alleen een kleine regel dat het programma onder voorbehoud van last-minute wijzigingen is.
 
-## Persoonlijk programma (verborgen pagina)
+## Persoonlijk programma (verborgen pagina, sinds 25 november 2026 offline)
+
+> Offline gehaald na het event: pagina, JS en CSS, `assets/data/`, plattegronden en de Netlify Function (met de versleutelde lijst) zijn uit de repo verwijderd; `/persoonlijk-programma` geeft een 404. Terugzetten kan met `git revert` van de commit "Na het event: ...". De omgevingsvariabele `PERSOONLIJK_PROGRAMMA_SLEUTEL` in Netlify en de Excel in de gedeelde Drive-map blijven staan; verwijder de variabele in de Netlify-webinterface als je zeker weet dat de lijst niet meer nodig is.
 
 - Pagina `persoonlijk-programma.html` (adres `/persoonlijk-programma`): een deelnemer vult voor- en achternaam in en ziet de eigen sessies per ronde plus de rest van de dag. Niet in het menu en niet in `sitemap.xml`; blijft `noindex`.
 - De deelnemerslijst komt uit een Excel ("Badges"). Die wordt versleuteld (AES-256-GCM) opgeslagen in `netlify/functions/persoonlijk-programma/data.mjs`. Een Netlify Function (`index.mjs`) zoekt de naam op en geeft alleen de sessies van die ene persoon terug. De publieke sessiegegevens (zonder namen) staan in `assets/data/programma-sessies.json`.

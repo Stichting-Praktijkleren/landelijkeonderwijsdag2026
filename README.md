@@ -30,6 +30,7 @@ Ging er iets mis? Rechtsklik in het tabblad History op de laatste commit en kies
 | `assets/styles.css` | alle opmaak (kleuren, lettertypes, kaarten) |
 | `assets/main.js` | menu, filters, favorieten |
 | `assets/img/` | foto's, logo's van sprekers en standhouders |
+| `fotos.html`, `foto/` | fotogalerij en een pagina per foto (gegenereerd met `tools/maak_fotogalerij.py`, niet handmatig aanpassen) |
 | `assets/files/` | timetable-PDF, brochure, agenda-bestand (.ics) |
 | `netlify.toml`, `_redirects`, `_headers` | instellingen en omleidingen |
 | `tools/` | scripts en uitleg voor het persoonlijk programma van 2026 (staat offline, zie `tools/README.md`) |
@@ -53,6 +54,9 @@ Een sessie weer vrijgeven doe je door die klasse weg te halen.
 
 **Een standhouder of spreker toevoegen**
 Zet de afbeelding in `assets/img/` en kopieer een bestaand blok in de juiste pagina. Gebruik het logo in de originele kleuren, zoals het is aangeleverd.
+
+**Foto's toevoegen of vervangen in de galerij**
+Zet de originelen in een map en draai `python tools/fotos_verkleinen.py "C:/pad/naar/map"`, vul de beschrijvingen (alt) in `tools/fotos.json` aan en draai `python tools/maak_fotogalerij.py`. Zie de uitleg bovenaan beide scripts. Controleer of de mensen op de foto's toestemming hebben gegeven.
 
 **Opmaak (CSS) aanpassen**
 Pas `assets/styles.css` aan en verhoog daarna in **alle** `.html`-bestanden het getal in `styles.css?v=...` (zoek en vervang over alle bestanden). Anders zien bezoekers nog even de oude opmaak.

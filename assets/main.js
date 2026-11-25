@@ -377,19 +377,33 @@
     });
   }
 
-  /* Sprekers-slider op de homepage */
-  var speakerTrack = document.querySelector('.speaker-slider__track');
-  if (speakerTrack) {
-    var prevBtn = document.querySelector('.speaker-slider__nav--prev');
-    var nextBtn = document.querySelector('.speaker-slider__nav--next');
+  /* Sliders op de homepage (sprekers en foto's) */
+  document.querySelectorAll('.speaker-slider, .foto-slider').forEach(function (root) {
+    var track = root.querySelector('.speaker-slider__track, .foto-slider__track');
+    if (!track) return;
+    var prevBtn = root.querySelector('.speaker-slider__nav--prev');
+    var nextBtn = root.querySelector('.speaker-slider__nav--next');
     var scrollByCard = function (dir) {
-      var item = speakerTrack.querySelector('.speaker-slider__item');
-      var step = item ? item.getBoundingClientRect().width + 22 : 260;
-      speakerTrack.scrollBy({ left: dir * step, behavior: 'smooth' });
+      var item = track.firstElementChild;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+      var step = item ? item.getBoundingClientRect().width + gap : 260;
+      track.scrollBy({ left: dir * step, behavior: 'smooth' });
     };
     if (prevBtn) prevBtn.addEventListener('click', function () { scrollByCard(-1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { scrollByCard(1); });
-  }
+
+    /* Foto-slider schuift rustig vanzelf door; stopt bij aanwijzen, aanraken of toetsenbordgebruik */
+    if (root.classList.contains('foto-slider') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var paused = false;
+      ['mouseenter', 'focusin', 'touchstart'].forEach(function (ev) { root.addEventListener(ev, function () { paused = true; }, { passive: true }); });
+      ['mouseleave', 'focusout'].forEach(function (ev) { root.addEventListener(ev, function () { paused = false; }); });
+      setInterval(function () {
+        if (paused || document.hidden) return;
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) track.scrollTo({ left: 0, behavior: 'smooth' });
+        else scrollByCard(1);
+      }, 4500);
+    }
+  });
 
   /* Terug naar boven */
   var backToTop = document.createElement('button');

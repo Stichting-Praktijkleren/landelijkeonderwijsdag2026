@@ -21,7 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://landelijkeonderwijsdag.nl"
-CSS = "assets/styles.css?v=46"
+CSS = "assets/styles.css?v=47"
 FOTOS = json.loads((ROOT / "tools" / "fotos.json").read_text(encoding="utf-8"))
 
 
@@ -132,7 +132,7 @@ def maak_galerij():
 
 {FOOTER}
 
-<script src="assets/main.js?v=13"></script>
+<script src="assets/main.js?v=14"></script>
 </body>
 </html>
 """
@@ -189,7 +189,7 @@ def maak_fotopagina(i):
 
 {footer}
 
-<script src="/assets/main.js?v=13"></script>
+<script src="/assets/main.js?v=14"></script>
 <script>
 (function () {{
   var b = document.querySelector('[data-deel]');
